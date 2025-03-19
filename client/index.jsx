@@ -31,30 +31,38 @@ function App() {
   }, []);
 
   return (
-    <div>
-      <h1>Hello World</h1>
-      
-      {loading && <p>Loading messages...</p>}
-      
-      {error && <p>Error: {error}</p>}
-      
-      {!loading && !error && (
+      <div>
+        <h1>My To-Do List</h1>
         <div>
-          <h2>Messages:</h2>
-          {messages.length === 0 ? (
-            <p>No messages found</p>
-          ) : (
-            <ul>
-              {messages.map((message, index) => (
-                <li key={index}>{message.message}</li>
-              ))}
-            </ul>
-          )}
+          <input
+              type="text"
+              placeholder="What do you need to do?"
+              onChange={(e) => setNewToDo(e.target.value)}
+          />
+          <button>Add a To-Do</button>
         </div>
-      )}
-    </div>
+
+        {loading && <p>Loading messages...</p>}
+
+        {error && <p>Error: {error}</p>}
+
+        {!loading && !error && (
+            <div>
+              <h2>Messages:</h2>
+              {messages.length === 0 ? (
+                  <p>No messages found</p>
+              ) : (
+                  <ul>
+                    {messages.map((message, index) => (
+                        <li key={index}>{message.message}</li>
+                    ))}
+                  </ul>
+              )}
+            </div>
+        )}
+      </div>
   );
 }
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
-root.render(<App />);
+root.render(<App/>);
