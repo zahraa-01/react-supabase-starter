@@ -19,7 +19,7 @@ const SUPABASE_URL = process.env.SUPABASE_URL;
 const SUPABASE_API_KEY = process.env.SUPABASE_ANON_KEY;
 
 // API endpoint that calls Supabase Edge Function
-app.get('/api/messages', async (req, res) => {
+app.get('/api/todos', async (req, res) => {
   try {
     // Validate that environment variables are set
     if (!SUPABASE_URL || !SUPABASE_API_KEY) {
@@ -27,7 +27,7 @@ app.get('/api/messages', async (req, res) => {
     }
     
     // Call the Supabase Edge Function
-    const response = await fetch(`${SUPABASE_URL}/functions/v1/messages`, {
+    const response = await fetch(`${SUPABASE_URL}/functions/v1/todos`, {
       headers: {
         'Authorization': `Bearer ${SUPABASE_API_KEY}`,
         'Content-Type': 'application/json'
@@ -44,9 +44,9 @@ app.get('/api/messages', async (req, res) => {
     // Send the data back to the client
     res.json(data);
   } catch (error) {
-    console.error('Error fetching messages:', error);
+    console.error('Error fetching To-Dos:', error);
     res.status(500).json({ 
-      error: 'Failed to fetch messages',
+      error: 'Failed to fetch To-Dos',
       message: error.message
     });
   }

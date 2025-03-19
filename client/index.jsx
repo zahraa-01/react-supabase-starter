@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import ReactDOM from 'react-dom/client';
 
 function App() {
-  const [messages, setMessages] = useState([]);
+  const [toDos, setToDos] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
@@ -10,18 +10,18 @@ function App() {
     const fetchMessages = async () => {
       try {
         setLoading(true);
-        const response = await fetch('/api/messages'); // implicitly performing a GET as it has only one parameter
+        const response = await fetch('/api/todos'); // implicitly performing a GET as it has only one parameter
         
         if (!response.ok) {
           throw new Error(`HTTP error! Status: ${response.status}`);
         }
         
         const data = await response.json();
-        setMessages(data);
+        setToDos(data);
         setError(null);
       } catch (err) {
-        setError(err.message);
-        setMessages([]);
+        setError(err.todo);
+        setToDos([]);
       } finally {
         setLoading(false);
       }
@@ -48,13 +48,13 @@ function App() {
 
         {!loading && !error && (
             <div>
-              <h2>Messages:</h2>
-              {messages.length === 0 ? (
+              <h2>What do you need to do?</h2>
+              {toDos.length === 0 ? (
                   <p>No messages found</p>
               ) : (
                   <ul>
-                    {messages.map((message, index) => (
-                        <li key={index}>{message.message}</li>
+                    {toDos.map((todo, index) => (
+                        <li key={index}>{todo.todo}</li>
                     ))}
                   </ul>
               )}
