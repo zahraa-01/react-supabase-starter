@@ -57,7 +57,6 @@ app.get('/api/todos', async (req, res) => {
 app.post('/api/todos', async (req, res) => {
   try {
     console.log('Received new To-Do:', req.body);
-    // Validate that environment variables are set
     if (!SUPABASE_URL || !SUPABASE_API_KEY) {
       throw new Error('Missing Supabase environment variables');
     }
