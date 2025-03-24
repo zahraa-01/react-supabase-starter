@@ -96,7 +96,8 @@ body {
 
 .edit-button,
 .save-button,
-.cancel-button {
+.cancel-button,
+.delete-button {
     border: none;
     padding: 6px 12px;
     border-radius: 6px;
@@ -120,6 +121,11 @@ body {
     color: white;
 }
 
+.delete-button {
+    background: cornflowerblue;
+    color: white;
+}
+
 .edit-button:hover {
     background: #d4a627;
 }
@@ -129,6 +135,10 @@ body {
 }
 
 .cancel-button:hover {
+    background: #e02f26;
+}
+
+.delete-button:hover {
     background: #e02f26;
 }
 

@@ -140,6 +140,48 @@ app.put('/api/todos/:id', async (req, res) => {
   }
 });
 
+app.delete('/api/todos/:id', async (req, res) => {
+  try {
+    if (!SUPABASE_URL || !SUPABASE_API_KEY) {
+      throw new Error('Missing Supabase environment variables');
+    }
+
+    const { id } = req.params;
+    console.log(`Deleting To-Do ID: ${id}`);
+
+    // Call the Supabase Edge Function
+    const response = await fetch(`${SUPABASE_URL}/functions/v1/todos`, {
+      method: 'DELETE',
+      headers: {
+        'Authorization': `Bearer ${SUPABASE_API_KEY}`,
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({ id })
+    });
+
+    if (!response.ok) {
+      throw new Error(`Edge function error: ${response.status} ${response.statusText}`);
+    }
+
+    // Get the JSON response from the Edge Function
+    const data = await response.json();
+    console.log('To-Do deleted in Supabase:', data);
+
+    // Send the data back to the client
+    res.json({
+      success: true,
+      message: 'To-Do deleted!',
+      todo: data
+    });
+  } catch (error) {
+    console.error('Error deleting To-Dos:', error);
+    res.status(500).json({
+      error: 'Failed to delete To-Dos',
+      message: error.message
+    });
+  }
+});
+
 // Simple response for root path
 app.get('/', (req, res) => {
   res.send('Express server is running. Please access the React app through the Vite dev server.');

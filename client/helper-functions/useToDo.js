@@ -65,9 +65,27 @@ export function useToDo() {
         }
     };
 
+    const deleteToDo = async (id) => {
+        try {
+            const response = await fetch(`/api/todos/${id}`, {
+                method: "DELETE",
+                headers: { "Content-Type": "application/json" }
+            });
+
+            console.log(response.status);
+
+            const data = await response.json();
+            if (data.success) {
+                fetchMessages();
+            }
+        } catch (err) {
+            console.error("Error deleting To-Do:", err);
+        }
+    };
+
     useEffect(() => {
         fetchMessages();
     }, []);
 
-    return { toDos, loading, error, postToDo, updateToDo };
+    return { toDos, loading, error, postToDo, updateToDo, deleteToDo };
 }
