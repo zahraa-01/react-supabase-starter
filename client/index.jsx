@@ -5,28 +5,59 @@ function App() {
   const [toDos, setToDos] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [newToDo, setNewTodo] = useState("");
+
+  console.log("TODOS ARE HEREEEEEE", toDos)
+
+  const postToDo = async () => {
+    if (!newToDo.trim()) return; // Prevent empty todos
+
+    try {
+      const response = await fetch('/api/todos', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ todo: newToDo }) // Backend expects "newToDo"
+      });
+
+      const data = await response.json();
+      console.log('To-Do added:', data);
+
+      if (data.success) {
+        setNewTodo(""); // Clear input field
+        fetchMessages(); // Fetch updated To-Do list after adding a new one
+      }
+    } catch (err) {
+      console.error("Error adding To-Do:", err);
+    }
+  };
+
+  const handleAddTodo = () => {
+    postToDo();
+  }
+
+  const fetchMessages = async () => {
+    try {
+      setLoading(true);
+      const response = await fetch('/api/todos');
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! Status: ${response.status}`);
+      }
+
+      const data = await response.json();
+      setToDos(data);
+      setError(null);
+    } catch (err) {
+      setError(err.todo);
+      setToDos([]);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   useEffect(() => {
-    const fetchMessages = async () => {
-      try {
-        setLoading(true);
-        const response = await fetch('/api/todos'); // implicitly performing a GET as it has only one parameter
-        
-        if (!response.ok) {
-          throw new Error(`HTTP error! Status: ${response.status}`);
-        }
-        
-        const data = await response.json();
-        setToDos(data);
-        setError(null);
-      } catch (err) {
-        setError(err.todo);
-        setToDos([]);
-      } finally {
-        setLoading(false);
-      }
-    };
-
     fetchMessages();
   }, []);
 
@@ -37,9 +68,10 @@ function App() {
           <input
               type="text"
               placeholder="What do you need to do?"
-              onChange={(e) => setNewToDo(e.target.value)}
+              value={newToDo}
+              onChange={(e) => setNewTodo(e.target.value)}
           />
-          <button>Add a To-Do</button>
+          <button onClick={handleAddTodo}>Add a To-Do</button>
         </div>
 
         {loading && <p>Loading messages...</p>}

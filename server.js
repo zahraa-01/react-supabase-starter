@@ -18,6 +18,8 @@ const PORT = process.env.PORT || 3000;
 const SUPABASE_URL = process.env.SUPABASE_URL;
 const SUPABASE_API_KEY = process.env.SUPABASE_ANON_KEY;
 
+app.use(express.json());
+
 // API endpoint that calls Supabase Edge Function
 app.get('/api/todos', async (req, res) => {
   try {
@@ -52,6 +54,50 @@ app.get('/api/todos', async (req, res) => {
   }
 });
 
+app.post('/api/todos', async (req, res) => {
+  try {
+    console.log('Received new To-Do:', req.body);
+    // Validate that environment variables are set
+    if (!SUPABASE_URL || !SUPABASE_API_KEY) {
+      throw new Error('Missing Supabase environment variables');
+    }
+
+    const newToDo = req.body.todo;
+    console.log('Posting new To-Do to Supabase:', newToDo);
+
+    // Call the Supabase Edge Function
+    const response = await fetch(`${SUPABASE_URL}/functions/v1/todos`, {
+      method: 'POST',
+      headers: {
+        'Authorization': `Bearer ${SUPABASE_API_KEY}`,
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({ todo: newToDo })
+    });
+
+    if (!response.ok) {
+      throw new Error(`Edge function error: ${response.status} ${response.statusText}`);
+    }
+
+    // Get the JSON response from the Edge Function
+    const data = await response.json();
+    console.log('To-Do added to Supabase:', data);
+
+    // Send the data back to the client
+    res.json({
+      success: true,
+      message: 'To-Do created!',
+      todo: newToDo
+    });
+  } catch (error) {
+    console.error('Error fetching To-Dos:', error);
+    res.status(500).json({
+      error: 'Failed to fetch To-Dos',
+      message: error.message
+    });
+  }
+});
+
 // Simple response for root path
 app.get('/', (req, res) => {
   res.send('Express server is running. Please access the React app through the Vite dev server.');
@@ -60,7 +106,7 @@ app.get('/', (req, res) => {
 // In production, serve the React build files
 if (process.env.NODE_ENV === 'production') {
   app.use(express.static(join(__dirname, 'client/dist')));
-  
+
   app.get('*', (req, res) => {
     res.sendFile(join(__dirname, 'client/dist/index.html'));
   });
