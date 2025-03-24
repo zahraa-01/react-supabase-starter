@@ -97,6 +97,49 @@ app.post('/api/todos', async (req, res) => {
   }
 });
 
+app.patch('/api/todos/:id', async (req, res) => {
+  try {
+    if (!SUPABASE_URL || !SUPABASE_API_KEY) {
+      throw new Error('Missing Supabase environment variables');
+    }
+
+    const { id } = req.params;
+    const { todo } = req.body;
+    console.log(`Updating To-Do ID ${id} with:`, todo);
+
+    // Call the Supabase Edge Function
+    const response = await fetch(`${SUPABASE_URL}/functions/v1/todos/${id}`, {
+      method: 'PATCH',
+      headers: {
+        'Authorization': `Bearer ${SUPABASE_API_KEY}`,
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({ todo })
+    });
+
+    if (!response.ok) {
+      throw new Error(`Edge function error: ${response.status} ${response.statusText}`);
+    }
+
+    // Get the JSON response from the Edge Function
+    const data = await response.json();
+    console.log('To-Do updated in Supabase:', data);
+
+    // Send the data back to the client
+    res.json({
+      success: true,
+      message: 'To-Do updated!',
+      todo: data
+    });
+  } catch (error) {
+    console.error('Error fetching To-Dos:', error);
+    res.status(500).json({
+      error: 'Failed to fetch To-Dos',
+      message: error.message
+    });
+  }
+});
+
 // Simple response for root path
 app.get('/', (req, res) => {
   res.send('Express server is running. Please access the React app through the Vite dev server.');
