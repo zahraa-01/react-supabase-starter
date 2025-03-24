@@ -97,7 +97,7 @@ app.post('/api/todos', async (req, res) => {
   }
 });
 
-app.patch('/api/todos/:id', async (req, res) => {
+app.put('/api/todos/:id', async (req, res) => {
   try {
     if (!SUPABASE_URL || !SUPABASE_API_KEY) {
       throw new Error('Missing Supabase environment variables');
@@ -108,13 +108,13 @@ app.patch('/api/todos/:id', async (req, res) => {
     console.log(`Updating To-Do ID ${id} with:`, todo);
 
     // Call the Supabase Edge Function
-    const response = await fetch(`${SUPABASE_URL}/functions/v1/todos/${id}`, {
-      method: 'PATCH',
+    const response = await fetch(`${SUPABASE_URL}/functions/v1/todos`, {
+      method: 'PUT',
       headers: {
         'Authorization': `Bearer ${SUPABASE_API_KEY}`,
         'Content-Type': 'application/json'
       },
-      body: JSON.stringify({ todo })
+      body: JSON.stringify({ id, todo })
     });
 
     if (!response.ok) {

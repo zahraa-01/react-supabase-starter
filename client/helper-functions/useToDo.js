@@ -44,9 +44,30 @@ export function useToDo() {
         }
     };
 
+    const updateToDo = async (id, updatedToDo) => {
+        if (!updatedToDo.trim()) return;
+
+        try {
+            const response = await fetch(`/api/todos/${id}`, {
+                method: "PUT",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ todo: updatedToDo }),
+            });
+
+            console.log(response.status);
+
+            const data = await response.json();
+            if (data.success) {
+                fetchMessages();
+            }
+        } catch (err) {
+            console.error("Error updating To-Do:", err);
+        }
+    };
+
     useEffect(() => {
         fetchMessages();
     }, []);
 
-    return { toDos, loading, error, postToDo };
+    return { toDos, loading, error, postToDo, updateToDo };
 }
