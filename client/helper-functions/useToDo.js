@@ -52,24 +52,29 @@ export function useToDo() {
         }
     };
 
-    const updateToDo = async (id, updatedToDo) => {
-        if (!updatedToDo.trim()) return;
-
+    const updateToDo = async (id, updatedText, updatedPriority) => {
         try {
+            console.log(`Updating To-Do with ID: ${id}`);
+            console.log(`New Text: ${updatedText}, New Priority: ${updatedPriority}`);
+
+            console.log("Request Body for Update:", { todo: updatedText, priority: updatedPriority });
+
             const response = await fetch(`/api/todos/${id}`, {
                 method: "PUT",
                 headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ todo: updatedToDo }),
+                body: JSON.stringify({ todo: updatedText, priority: updatedPriority })
             });
 
-            console.log(response.status);
-
             const data = await response.json();
-            if (data.success) {
-                fetchMessages();
+            console.log('Response from server:', data);
+
+            if (!response.ok) {
+                throw new Error(data.message || 'Failed to update To-Do');
             }
-        } catch (err) {
-            console.error("Error updating To-Do:", err);
+
+            fetchMessages();
+        } catch (error) {
+            console.error("Update error:", error);
         }
     };
 
@@ -79,8 +84,6 @@ export function useToDo() {
                 method: "DELETE",
                 headers: { "Content-Type": "application/json" }
             });
-
-            console.log(response.status);
 
             const data = await response.json();
             if (data.success) {

@@ -32,9 +32,7 @@ function App() {
         deleteToDo(id);
     };
 
-    const filteredTodos = toDos.filter((todo) => {
-        return filterPriority === "all" || todo.priority === filterPriority;
-    });
+    const filteredTodos = toDos.filter((todo) => filterPriority === "all" || todo.priority === filterPriority);
 
     return (
         <div className="app-container">

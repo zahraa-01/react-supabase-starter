@@ -108,17 +108,17 @@ app.put('/api/todos/:id', async (req, res) => {
     }
 
     const { id } = req.params;
-    const { todo } = req.body;
-    console.log(`Updating To-Do ID ${id} with:`, todo);
+    const { todo, priority } = req.body;
+    console.log(`Updating To-Do ID ${id} with:`, todo, priority);
 
     // Call the Supabase Edge Function
     const response = await fetch(`${SUPABASE_URL}/functions/v1/todos`, {
       method: 'PUT',
       headers: {
         'Authorization': `Bearer ${SUPABASE_API_KEY}`,
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
       },
-      body: JSON.stringify({ id, todo })
+      body: JSON.stringify({ id, todo, priority })
     });
 
     if (!response.ok) {
@@ -133,13 +133,13 @@ app.put('/api/todos/:id', async (req, res) => {
     res.json({
       success: true,
       message: 'To-Do updated!',
-      todo: data
+      todo: data,
     });
   } catch (error) {
     console.error('Error fetching To-Dos:', error);
     res.status(500).json({
       error: 'Failed to fetch To-Dos',
-      message: error.message
+      message: error.message,
     });
   }
 });
