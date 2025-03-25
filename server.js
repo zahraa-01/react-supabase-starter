@@ -57,16 +57,19 @@ app.get('/api/todos', async (req, res) => {
 app.post('/api/todos', async (req, res) => {
   try {
     console.log('Received new To-Do:', req.body);
+
     if (!SUPABASE_URL || !SUPABASE_API_KEY) {
       throw new Error('Missing Supabase environment variables');
     }
 
-    const newToDo = req.body.todo;
-    console.log('Posting new To-Do to Supabase:', newToDo);
+    const { todo, priority } = req.body;
+    console.log('Posting new To-Do to Supabase:', todo, 'with priority:', priority);
 
-    if (!newToDo || typeof newToDo !== 'string' || newToDo.trim().length < 3 || newToDo.trim().length > 100) {
+    if (!todo || typeof todo !== 'string' || todo.trim().length < 3 || todo.trim().length > 100) {
       return res.status(400).json({ error: 'To-Do must be a string between 3 and 100 characters' });
     }
+
+    const finalPriority = priority ? priority.toLowerCase() : 'low';
 
     // Call the Supabase Edge Function
     const response = await fetch(`${SUPABASE_URL}/functions/v1/todos`, {
@@ -75,7 +78,7 @@ app.post('/api/todos', async (req, res) => {
         'Authorization': `Bearer ${SUPABASE_API_KEY}`,
         'Content-Type': 'application/json'
       },
-      body: JSON.stringify({ todo: newToDo })
+      body: JSON.stringify({ todo, priority: finalPriority })
     });
 
     if (!response.ok) {
@@ -90,7 +93,7 @@ app.post('/api/todos', async (req, res) => {
     res.json({
       success: true,
       message: 'To-Do created!',
-      todo: newToDo
+      todo: data
     });
   } catch (error) {
     console.error('Error fetching To-Dos:', error);
