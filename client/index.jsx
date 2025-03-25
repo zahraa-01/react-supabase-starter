@@ -1,28 +1,30 @@
 import React, { useState } from "react";
 import ReactDOM from "react-dom/client";
-import { useToDo } from "./helper-functions/useToDo"; // Assuming useToDo provides all the todo-related actions
+import { useToDo } from "./helper-functions/useToDo";
 import "./styles.css";
 
 function App() {
     const { toDos, loading, error, postToDo, updateToDo, deleteToDo } = useToDo();
     const [newToDo, setNewTodo] = useState("");
-    const [priority, setPriority] = useState("low"); // Default priority for new todo
+    const [priority, setPriority] = useState("low");
     const [editingId, setEditingId] = useState(null);
     const [updatedText, setUpdatedText] = useState("");
-    const [filterPriority, setFilterPriority] = useState(""); // For filtering by priority
+    const [updatedPriority, setUpdatedPriority] = useState("low");
+    const [filterPriority, setFilterPriority] = useState("all");
 
     const handleAddTodo = () => {
         if (newToDo.trim()) {
-            postToDo(newToDo, priority); // Include priority when posting the new todo
+            postToDo(newToDo, priority);
             setNewTodo("");
         }
     };
 
     const handleUpdateTodo = (id) => {
         if (updatedText.trim()) {
-            updateToDo(id, updatedText);
+            updateToDo(id, updatedText, updatedPriority);
             setEditingId(null);
             setUpdatedText("");
+            setUpdatedPriority("low");
         }
     };
 
@@ -30,10 +32,9 @@ function App() {
         deleteToDo(id);
     };
 
-    // Filter todos based on the selected priority
-    const filteredTodos = filterPriority
-        ? toDos.filter((todo) => todo.priority === filterPriority)
-        : toDos;
+    const filteredTodos = toDos.filter((todo) => {
+        return filterPriority === "all" || todo.priority === filterPriority;
+    });
 
     return (
         <div className="app-container">
@@ -50,7 +51,7 @@ function App() {
                 />
                 <select
                     value={priority}
-                    onChange={(e) => setPriority(e.target.value)} // Priority for the new to-do
+                    onChange={(e) => setPriority(e.target.value)}
                 >
                     <option value="low">Low</option>
                     <option value="medium">Medium</option>
@@ -61,14 +62,14 @@ function App() {
                 </button>
             </div>
 
-            {/* Dropdown to filter todos by priority */}
+            {/* Dropdown for filtering todos by priority (below the add-to-do input) */}
             <div className="filter-container">
                 <label>Filter by Priority:</label>
                 <select
                     value={filterPriority}
-                    onChange={(e) => setFilterPriority(e.target.value)} // Update filter priority
+                    onChange={(e) => setFilterPriority(e.target.value)}
                 >
-                    <option value="">All</option>
+                    <option value="all">All</option>
                     <option value="low">Low</option>
                     <option value="medium">Medium</option>
                     <option value="high">High</option>
@@ -90,6 +91,14 @@ function App() {
                                     value={updatedText}
                                     onChange={(e) => setUpdatedText(e.target.value)}
                                 />
+                                <select
+                                    value={updatedPriority}
+                                    onChange={(e) => setUpdatedPriority(e.target.value)}
+                                >
+                                    <option value="low">Low</option>
+                                    <option value="medium">Medium</option>
+                                    <option value="high">High</option>
+                                </select>
                                 <div className="button-group">
                                     <button className="save-button" onClick={() => handleUpdateTodo(todo.id)}>
                                         Save
@@ -103,7 +112,11 @@ function App() {
                             <>
                                 <span className="todo-text">{todo.todo}</span>
                                 <div className="button-group">
-                                    <button className="edit-button" onClick={() => setEditingId(todo.id)}>
+                                    <button className="edit-button" onClick={() => {
+                                        setEditingId(todo.id);
+                                        setUpdatedText(todo.todo);
+                                        setUpdatedPriority(todo.priority);
+                                    }}>
                                         Edit
                                     </button>
                                     <button className="delete-button" onClick={() => handleDeleteTodo(todo.id)}>
