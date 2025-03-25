@@ -64,6 +64,10 @@ app.post('/api/todos', async (req, res) => {
     const newToDo = req.body.todo;
     console.log('Posting new To-Do to Supabase:', newToDo);
 
+    if (!newToDo || typeof newToDo !== 'string' || newToDo.trim().length < 3 || newToDo.trim().length > 100) {
+      return res.status(400).json({ error: 'To-Do must be a string between 3 and 100 characters' });
+    }
+
     // Call the Supabase Edge Function
     const response = await fetch(`${SUPABASE_URL}/functions/v1/todos`, {
       method: 'POST',

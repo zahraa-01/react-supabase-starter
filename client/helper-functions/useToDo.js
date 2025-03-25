@@ -26,7 +26,10 @@ export function useToDo() {
     };
 
     const postToDo = async (newToDo) => {
-        if (!newToDo.trim()) return;
+        if (!newToDo.trim() || newToDo.length < 3 || newToDo.length > 100) {
+            setError('To-Do must be between 3 and 100 characters');
+            return;
+        }
 
         try {
             const response = await fetch("/api/todos", {
