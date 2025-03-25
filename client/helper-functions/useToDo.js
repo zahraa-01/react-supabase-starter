@@ -25,9 +25,14 @@ export function useToDo() {
         }
     };
 
-    const postToDo = async (newToDo) => {
+    const postToDo = async (newToDo, priority) => {
         if (!newToDo.trim() || newToDo.length < 3 || newToDo.length > 100) {
             setError('To-Do must be between 3 and 100 characters');
+            return;
+        }
+
+        if (!priority) {
+            setError('Priority must be set for each To-Do');
             return;
         }
 
@@ -35,7 +40,7 @@ export function useToDo() {
             const response = await fetch("/api/todos", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ todo: newToDo }),
+                body: JSON.stringify({ todo: newToDo, priority }),
             });
 
             const data = await response.json();

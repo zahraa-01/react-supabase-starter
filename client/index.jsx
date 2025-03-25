@@ -1,17 +1,19 @@
 import React, { useState } from "react";
 import ReactDOM from "react-dom/client";
-import { useToDo } from "./helper-functions/useToDo";
+import { useToDo } from "./helper-functions/useToDo"; // Assuming useToDo provides all the todo-related actions
 import "./styles.css";
 
 function App() {
     const { toDos, loading, error, postToDo, updateToDo, deleteToDo } = useToDo();
     const [newToDo, setNewTodo] = useState("");
+    const [priority, setPriority] = useState("low"); // Default priority for new todo
     const [editingId, setEditingId] = useState(null);
     const [updatedText, setUpdatedText] = useState("");
+    const [filterPriority, setFilterPriority] = useState(""); // For filtering by priority
 
     const handleAddTodo = () => {
         if (newToDo.trim()) {
-            postToDo(newToDo);
+            postToDo(newToDo, priority); // Include priority when posting the new todo
             setNewTodo("");
         }
     };
@@ -28,6 +30,11 @@ function App() {
         deleteToDo(id);
     };
 
+    // Filter todos based on the selected priority
+    const filteredTodos = filterPriority
+        ? toDos.filter((todo) => todo.priority === filterPriority)
+        : toDos;
+
     return (
         <div className="app-container">
             <h1 className="title">To-Do List</h1>
@@ -41,17 +48,39 @@ function App() {
                     onChange={(e) => setNewTodo(e.target.value)}
                     placeholder="Add a new to-do"
                 />
+                <select
+                    value={priority}
+                    onChange={(e) => setPriority(e.target.value)} // Priority for the new to-do
+                >
+                    <option value="low">Low</option>
+                    <option value="medium">Medium</option>
+                    <option value="high">High</option>
+                </select>
                 <button className="add-button" onClick={handleAddTodo}>
                     Add
                 </button>
             </div>
 
+            {/* Dropdown to filter todos by priority */}
+            <div className="filter-container">
+                <label>Filter by Priority:</label>
+                <select
+                    value={filterPriority}
+                    onChange={(e) => setFilterPriority(e.target.value)} // Update filter priority
+                >
+                    <option value="">All</option>
+                    <option value="low">Low</option>
+                    <option value="medium">Medium</option>
+                    <option value="high">High</option>
+                </select>
+            </div>
+
             {loading && <p className="loading-text">Loading...</p>}
             {error && <p className="error-text">{error}</p>}
-            {!loading && toDos.length === 0 && <p className="empty-text">No tasks available</p>}
+            {!loading && filteredTodos.length === 0 && <p className="empty-text">No tasks available</p>}
 
             <ul className="todo-list">
-                {toDos.map((todo) => (
+                {filteredTodos.map((todo) => (
                     <li key={todo.id} className="todo-card">
                         {editingId === todo.id ? (
                             <div className="edit-mode">
@@ -77,7 +106,7 @@ function App() {
                                     <button className="edit-button" onClick={() => setEditingId(todo.id)}>
                                         Edit
                                     </button>
-                                    <button className="delete-button" onClick={() => handleDeleteTodo(todo.id, todo)}>
+                                    <button className="delete-button" onClick={() => handleDeleteTodo(todo.id)}>
                                         Delete
                                     </button>
                                 </div>
