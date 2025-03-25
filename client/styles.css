@@ -38,6 +38,35 @@ body {
     background: #fff;
 }
 
+/* Dropdown (select) styling to match input fields */
+select {
+    appearance: none; /* Removes default browser styling */
+    border: 1px solid #ddd; /* Matches input fields */
+    border-radius: 8px;
+    padding: 8px 30px 8px 10px; /* Adjusted padding for better fit */
+    font-size: 16px;
+    background: #fff;
+    color: #333;
+    cursor: pointer;
+    position: relative;
+    width: auto; /* Allows the box to resize based on content */
+}
+
+select {
+    background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' width='20' height='20' fill='%23333'%3E%3Cpath d='M7 10l5 5 5-5H7z'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 10px center;
+    background-size: 16px;
+    padding-right: 30px; /* Makes space for the arrow */
+}
+
+/* Consistent focus styling */
+select:focus {
+    outline: none;
+    border-color: #aaa; /* Softer grey on focus */
+    box-shadow: none;
+}
+
 .add-button {
     background: linear-gradient(135deg, #6a11cb, #2575fc);
     color: white;
