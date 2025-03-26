@@ -38,10 +38,10 @@ export function App() {
     if (showLandingPage) {
         return (
             <div className="splash-screen">
-                <h1 className="splash-title">Oi</h1>
+                <h1 className="splash-title">Oi!</h1>
                 <p className="splash-subheader">Get productive loser</p>
                 <button className="splash-button" onClick={() => setShowLandingPage(false)}>
-                    <img src="/assets/right-arrow-outline.png" alt="Start"/>
+                    <img src="/assets/right-arrow-outline.png" alt="Start" />
                 </button>
             </div>
         );
@@ -49,8 +49,9 @@ export function App() {
 
     return (
         <div className="app-container">
-            <h1 className="title">To-Do List</h1>
+            <h2 className="title">What shit we doing today?</h2>
 
+            {/* Input and Filter Controls outside the todo-main-container */}
             <div className="input-container">
                 <input
                     type="text"
@@ -72,8 +73,9 @@ export function App() {
                 </button>
             </div>
 
+            {/* Filter by Priority */}
             <div className="filter-container">
-                <label>Filter by Priority:</label>
+                <label className="filter-title">Filter by Priority:</label>
                 <select
                     value={filterPriority}
                     onChange={(e) => setFilterPriority(e.target.value)}
@@ -85,58 +87,63 @@ export function App() {
                 </select>
             </div>
 
-            {loading && <p className="loading-text">Loading...</p>}
-            {error && <p className="error-text">{error}</p>}
-            {!loading && filteredTodos.length === 0 && <p className="empty-text">No tasks available</p>}
+            {/* To-Do Main Container now only holds the list */}
+            <div className="todo-main-container">
+                <div className="todo-list-container">
+                    {loading && <p className="loading-text">Loading...</p>}
+                    {error && <p className="error-text">{error}</p>}
+                    {!loading && filteredTodos.length === 0 && <p className="empty-text">No tasks available</p>}
 
-            <ul className="todo-list">
-                {filteredTodos.map((todo) => (
-                    <li key={todo.id} className="todo-card">
-                        {editingId === todo.id ? (
-                            <div className="edit-mode">
-                                <input
-                                    type="text"
-                                    className="edit-input"
-                                    value={updatedText}
-                                    onChange={(e) => setUpdatedText(e.target.value)}
-                                />
-                                <select
-                                    value={updatedPriority}
-                                    onChange={(e) => setUpdatedPriority(e.target.value)}
-                                >
-                                    <option value="low">Low</option>
-                                    <option value="medium">Medium</option>
-                                    <option value="high">High</option>
-                                </select>
-                                <div className="button-group">
-                                    <button className="save-button" onClick={() => handleUpdateTodo(todo.id)}>
-                                        Save
-                                    </button>
-                                    <button className="cancel-button" onClick={() => setEditingId(null)}>
-                                        Cancel
-                                    </button>
-                                </div>
-                            </div>
-                        ) : (
-                            <>
-                                <span className="todo-text">{todo.todo}</span>
-                                <div className="button-group">
-                                    <button className="edit-button" onClick={() => {
-                                        setEditingId(todo.id);
-                                        setUpdatedText(todo.todo);
-                                        setUpdatedPriority(todo.priority);
-                                    }}>
-                                        Edit
-                                    </button>
-                                    <button className="delete-button" onClick={() => handleDeleteTodo(todo.id)}>
-                                        Delete
-                                    </button>
-                                </div>
-                            </>
-                        )}
-                    </li>
-                ))}
-            </ul>
+                    <ul className="todo-list">
+                        {filteredTodos.map((todo) => (
+                            <li key={todo.id} className="todo-card">
+                                {editingId === todo.id ? (
+                                    <div className="edit-mode">
+                                        <input
+                                            type="text"
+                                            className="edit-input"
+                                            value={updatedText}
+                                            onChange={(e) => setUpdatedText(e.target.value)}
+                                        />
+                                        <select
+                                            value={updatedPriority}
+                                            onChange={(e) => setUpdatedPriority(e.target.value)}
+                                        >
+                                            <option value="low">Low</option>
+                                            <option value="medium">Medium</option>
+                                            <option value="high">High</option>
+                                        </select>
+                                        <div className="button-group">
+                                            <button className="save-button" onClick={() => handleUpdateTodo(todo.id)}>
+                                                Save
+                                            </button>
+                                            <button className="cancel-button" onClick={() => setEditingId(null)}>
+                                                Cancel
+                                            </button>
+                                        </div>
+                                    </div>
+                                ) : (
+                                    <>
+                                        <span className="todo-text">{todo.todo}</span>
+                                        <div className="button-group">
+                                            <button className="edit-button" onClick={() => {
+                                                setEditingId(todo.id);
+                                                setUpdatedText(todo.todo);
+                                                setUpdatedPriority(todo.priority);
+                                            }}>
+                                                Edit
+                                            </button>
+                                            <button className="delete-button" onClick={() => handleDeleteTodo(todo.id)}>
+                                                Delete
+                                            </button>
+                                        </div>
+                                    </>
+                                )}
+                            </li>
+                        ))}
+                    </ul>
+                </div>
+            </div>
         </div>
     );
 }

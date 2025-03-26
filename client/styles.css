@@ -1,3 +1,4 @@
+/* General reset and styles */
 * {
     margin: 0;
     padding: 0;
@@ -7,6 +8,17 @@
 html, body {
     width: 100%;
     height: 100%;
+    font-family: 'Arial', sans-serif;
+    background-image: url("https://images.unsplash.com/photo-1550859492-d5da9d8e45f3?q=80&w=3270&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D");
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center;
+    transition: background 0.5s ease;
+}
+
+@font-face {
+    font-family: 'Starborn';
+    src: url('Assets/Starborn.ttf') format('truetype');
 }
 
 .splash-screen {
@@ -22,6 +34,7 @@ html, body {
     background-repeat: no-repeat;
     background-size: cover;
     background-position: center;
+    transition: background 0.5s ease;
 }
 
 .splash-title {
@@ -48,44 +61,25 @@ html, body {
 }
 
 .splash-button img {
-    width: 40px;
-    height: auto;
-    margin-bottom: 5px;
-}
-
-/* Ensure no box around the image and text */
-.splash-button img, .splash-button span {
-    margin: 0;
-    padding: 0;
-    border: none;
-}
-
-.splash-button img {
     width: 80px;
     filter: invert(1);
 }
 
-@font-face {
-    font-family: 'Starborn';
-    src: url('Assets/Starborn.ttf') format('truetype');
-}
-
+/* App Container */
 .app-container {
     padding: 20px;
-    font-family: Arial, sans-serif;
-    background-image: url("https://images.unsplash.com/photo-1550859492-d5da9d8e45f3?q=80&w=3270&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D");
-    background-repeat: no-repeat;
-    background-size: cover;
-    background-position: center center;
-    background-attachment: fixed;
-    min-height: 100vh;
+    max-width: 1200px;
+    margin: 0 auto;
+    border-radius: 15px;
 }
 
 .title {
-    font-size: 24px;
-    font-weight: bold;
-    color: #444;
-    margin-bottom: 15px;
+    font-size: 3.5rem;
+    font-family: 'Starborn', sans-serif;
+    color: white;
+    text-align: center;
+    margin-top: 30px;
+    margin-bottom: 40px;
 }
 
 .input-container {
@@ -93,161 +87,151 @@ html, body {
     gap: 10px;
     justify-content: center;
     margin-bottom: 20px;
+    padding: 0 10px;
 }
 
 .todo-input {
-    flex: 1;
-    padding: 10px;
-    border: 1px solid #ddd;
-    border-radius: 8px;
+    padding: 12px;
     font-size: 16px;
-    background: #fff;
-}
-
-/* Dropdown (select) styling to match input fields */
-select {
-    appearance: none; /* Removes default browser styling */
-    border: 1px solid #ddd; /* Matches input fields */
     border-radius: 8px;
-    padding: 8px 30px 8px 10px; /* Adjusted padding for better fit */
-    font-size: 16px;
-    background: #fff;
-    color: #333;
-    cursor: pointer;
-    position: relative;
-    width: auto; /* Allows the box to resize based on content */
+    border: 1px solid #ccc;
+    width: 300px;
 }
 
 select {
-    background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' width='20' height='20' fill='%23333'%3E%3Cpath d='M7 10l5 5 5-5H7z'/%3E%3C/svg%3E");
-    background-repeat: no-repeat;
-    background-position: right 10px center;
-    background-size: 16px;
-    padding-right: 30px; /* Makes space for the arrow */
+    padding: 12px;
+    font-size: 16px;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+    width: 150px;
 }
 
-/* Consistent focus styling */
-select:focus {
-    outline: none;
-    border-color: #aaa; /* Softer grey on focus */
-    box-shadow: none;
-}
-
+/* Add Button */
 .add-button {
-    background: linear-gradient(135deg, #6a11cb, #2575fc);
-    color: white;
-    border: none;
-    padding: 10px 15px;
+    background-color: transparent; /* No background color */
+    color: white; /* White text */
+    padding: 10px 20px;
     border-radius: 8px;
+    border: 2px solid white; /* White outline */
     cursor: pointer;
-    font-size: 16px;
-    transition: 0.3s;
+    transition: background-color 0.3s ease, opacity 0.3s ease; /* Smooth transition */
 }
 
 .add-button:hover {
-    background: linear-gradient(135deg, #5e0eaf, #1e5cd7);
+    background-color: white;
+    color: #333;
+    opacity: 0.8;
+}
+
+.filter-title {
+    color: white;
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+}
+
+.filter-container {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    margin-bottom: 10px;
+}
+
+.filter-container select {
+    width: 110px;
+    height: 29px;
+    padding: 4px 8px;
+    font-size: 16px;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+    background-color: #fff;
+    text-align: left;
+    cursor: pointer;
+}
+
+.todo-main-container {
+    background: #fff;
+    padding: 20px;
+    border-radius: 15px;
+    box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.1);
+    width: 100%;
+}
+
+.todo-list-container {
+    max-height: 400px;
+    overflow-y: auto;
 }
 
 .todo-list {
-    margin-top: 10px;
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
+    list-style: none;
+    padding: 0;
 }
 
 .todo-card {
-    background: white;
-    border-radius: 8px;
-    padding: 12px;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    box-shadow: 0px 2px 6px rgba(0, 0, 0, 0.1);
-}
-
-.todo-text {
-    font-size: 16px;
-    color: #333;
+    background: #fff;
+    padding: 12px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    margin-bottom: 10px;
 }
 
 .edit-mode {
     display: flex;
-    width: 100%;
+    align-items: center;
     gap: 10px;
+    width: 100%;
 }
 
 .edit-input {
-    flex: 1;
-    padding: 8px;
-    border: 1px solid #ddd;
-    border-radius: 8px;
+    flex-grow: 2;
+    padding: 10px;
     font-size: 16px;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+}
+
+.edit-priority {
+    width: 120px;
+    padding: 8px;
+    font-size: 14px;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+}
+
+.todo-text {
+    font-size: 18px;
+    color: #333;
 }
 
 .button-group {
     display: flex;
-    gap: 8px;
+    gap: 10px;
 }
 
-.edit-button,
-.save-button,
-.cancel-button,
-.delete-button {
+.edit-button, .delete-button, .save-button, .cancel-button {
+    background-color: #2196F3;
+    color: white;
     border: none;
-    padding: 6px 12px;
-    border-radius: 6px;
+    padding: 8px 16px;
+    border-radius: 5px;
     cursor: pointer;
-    font-size: 14px;
-    transition: 0.3s;
 }
 
-.edit-button {
-    background: #f0c14b;
-    color: #333;
+.delete-button {
+    background-color: #f44336;
 }
 
 .save-button {
-    background: #34c759;
-    color: white;
+    background-color: #4CAF50;
 }
 
 .cancel-button {
-    background: #ff3b30;
-    color: white;
+    background-color: #f44336;
 }
 
-.delete-button {
-    background: cornflowerblue;
-    color: white;
-}
-
-.edit-button:hover {
-    background: #d4a627;
-}
-
-.save-button:hover {
-    background: #28a745;
-}
-
-.cancel-button:hover {
-    background: #e02f26;
-}
-
-.delete-button:hover {
-    background: #e02f26;
-}
-
-.loading-text {
-    font-size: 16px;
-    color: #555;
-}
-
-.error-text {
-    font-size: 16px;
-    color: red;
-}
-
-.empty-text {
-    font-size: 16px;
-    color: #888;
+.edit-button:hover, .delete-button:hover, .save-button:hover, .cancel-button:hover {
+    opacity: 0.8;
 }

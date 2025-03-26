@@ -67,7 +67,7 @@ describe('Todo App', () => {
         render(<App />);
 
         // Check if the title is displayed
-        expect(screen.getByText('To-Do List')).toBeInTheDocument();
+        expect(screen.getByText('What shit we doing today?')).toBeInTheDocument();
 
         // Check if todo items are displayed
         expect(screen.getByText('Test todo 1')).toBeInTheDocument();
