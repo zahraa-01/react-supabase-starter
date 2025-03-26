@@ -3,6 +3,7 @@ import { useToDo } from "./helperFunctions/useToDo";
 
 export function App() {
     const { toDos, loading, error, postToDo, updateToDo, deleteToDo } = useToDo();
+    const [showLandingPage, setShowLandingPage] = useState(true);
     const [newToDo, setNewTodo] = useState("");
     const [priority, setPriority] = useState("low");
     const [editingId, setEditingId] = useState(null);
@@ -30,13 +31,26 @@ export function App() {
         deleteToDo(id);
     };
 
-    const filteredTodos = toDos.filter((todo) => filterPriority === "all" || todo.priority === filterPriority);
+    const filteredTodos = toDos.filter(
+        (todo) => filterPriority === "all" || todo.priority === filterPriority
+    );
+
+    if (showLandingPage) {
+        return (
+            <div className="splash-screen">
+                <h1 className="splash-title">Oi</h1>
+                <p className="splash-subheader">Get productive loser</p>
+                <button className="splash-button" onClick={() => setShowLandingPage(false)}>
+                    <img src="/assets/right-arrow-outline.png" alt="Start"/>
+                </button>
+            </div>
+        );
+    }
 
     return (
         <div className="app-container">
             <h1 className="title">To-Do List</h1>
 
-            {/* Input for new To-Do */}
             <div className="input-container">
                 <input
                     type="text"
@@ -58,7 +72,6 @@ export function App() {
                 </button>
             </div>
 
-            {/* Dropdown for filtering todos by priority */}
             <div className="filter-container">
                 <label>Filter by Priority:</label>
                 <select
