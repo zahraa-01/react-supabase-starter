@@ -31,6 +31,21 @@ jest.mock('../helperFunctions/useToDo', () => ({
     })
 }));
 
+jest.mock('react', () => {
+    const originalReact = jest.requireActual('react');
+    return {
+        ...originalReact,
+        useState: jest.fn().mockImplementation((initial) => {
+            // If this is the splash screen state, start with it already dismissed
+            if (typeof initial === 'boolean') {
+                return [false, jest.fn()];
+            }
+            // Otherwise use the normal useState implementation
+            return originalReact.useState(initial);
+        })
+    };
+});
+
 import { App } from '../App.jsx';
 
 describe('Todo App', () => {
