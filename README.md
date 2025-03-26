@@ -296,6 +296,8 @@ UI/UX Testing:
 - Error messages are user-friendly
 - Success confirmations appear as expected
 
+To have a look how we've done some manual testing, check out the screenshots folder where we use our console logs to reference back to the database, as well as successful unit tests!
+
 **Unit Testing Setup**
 
 1. Install testing dependencies:
