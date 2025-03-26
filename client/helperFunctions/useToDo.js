@@ -54,11 +54,6 @@ export function useToDo() {
 
     const updateToDo = async (id, updatedText, updatedPriority) => {
         try {
-            console.log(`Updating To-Do with ID: ${id}`);
-            console.log(`New Text: ${updatedText}, New Priority: ${updatedPriority}`);
-
-            console.log("Request Body for Update:", { todo: updatedText, priority: updatedPriority });
-
             const response = await fetch(`/api/todos/${id}`, {
                 method: "PUT",
                 headers: { "Content-Type": "application/json" },
@@ -66,7 +61,6 @@ export function useToDo() {
             });
 
             const data = await response.json();
-            console.log('Response from server:', data);
 
             if (!response.ok) {
                 throw new Error(data.message || 'Failed to update To-Do');

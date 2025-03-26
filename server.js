@@ -56,14 +56,11 @@ app.get('/api/todos', async (req, res) => {
 
 app.post('/api/todos', async (req, res) => {
   try {
-    console.log('Received new To-Do:', req.body);
-
     if (!SUPABASE_URL || !SUPABASE_API_KEY) {
       throw new Error('Missing Supabase environment variables');
     }
 
     const { todo, priority } = req.body;
-    console.log('Posting new To-Do to Supabase:', todo, 'with priority:', priority);
 
     if (!todo || typeof todo !== 'string' || todo.trim().length < 3 || todo.trim().length > 100) {
       return res.status(400).json({ error: 'To-Do must be a string between 3 and 100 characters' });
@@ -87,7 +84,6 @@ app.post('/api/todos', async (req, res) => {
 
     // Get the JSON response from the Edge Function
     const data = await response.json();
-    console.log('To-Do added to Supabase:', data);
 
     // Send the data back to the client
     res.json({
@@ -112,7 +108,6 @@ app.put('/api/todos/:id', async (req, res) => {
 
     const { id } = req.params;
     const { todo, priority } = req.body;
-    console.log(`Updating To-Do ID ${id} with:`, todo, priority);
 
     // Call the Supabase Edge Function
     const response = await fetch(`${SUPABASE_URL}/functions/v1/todos`, {
@@ -130,7 +125,6 @@ app.put('/api/todos/:id', async (req, res) => {
 
     // Get the JSON response from the Edge Function
     const data = await response.json();
-    console.log('To-Do updated in Supabase:', data);
 
     // Send the data back to the client
     res.json({
@@ -154,7 +148,6 @@ app.delete('/api/todos/:id', async (req, res) => {
     }
 
     const { id } = req.params;
-    console.log(`Deleting To-Do ID: ${id}`);
 
     // Call the Supabase Edge Function
     const response = await fetch(`${SUPABASE_URL}/functions/v1/todos`, {
@@ -172,7 +165,6 @@ app.delete('/api/todos/:id', async (req, res) => {
 
     // Get the JSON response from the Edge Function
     const data = await response.json();
-    console.log('To-Do deleted in Supabase:', data);
 
     // Send the data back to the client
     res.json({

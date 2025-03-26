@@ -51,7 +51,7 @@ export function App() {
         <div className="app-container">
             <h2 className="title">What shit we doing today?</h2>
 
-            {/* Input and Filter Controls outside the todo-main-container */}
+            {/* Input and Filter Controls outside the main container for todos */}
             <div className="input-container">
                 <input
                     type="text"

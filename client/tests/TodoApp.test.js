@@ -69,7 +69,7 @@ describe('Todo App', () => {
         // Check if the title is displayed
         expect(screen.getByText('What shit we doing today?')).toBeInTheDocument();
 
-        // Check if todo items are displayed
+        // Check if todos display
         expect(screen.getByText('Test todo 1')).toBeInTheDocument();
         expect(screen.getByText('Test todo 2')).toBeInTheDocument();
 
